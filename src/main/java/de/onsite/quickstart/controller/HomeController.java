@@ -23,7 +23,7 @@ public class HomeController {
 	}
 
         @RequestMapping("/test")
-	public String home() {
+	public String test() {
 	  return "This is a test!";
 	}
 
