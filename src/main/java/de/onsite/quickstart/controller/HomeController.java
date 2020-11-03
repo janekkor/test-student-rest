@@ -21,7 +21,11 @@ public class HomeController {
 	public String home() {
 	  return "Hello Onsite!";
 	}
-	
+
+        @RequestMapping("/test")
+	public String home() {
+	  return "This is a test!";
+	}
 
 	@RequestMapping("/students")
 	public List<Student> students() {
