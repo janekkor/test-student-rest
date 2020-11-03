@@ -1,0 +1,4 @@
+de\onsite\quickstart\controller\HomeController.class
+de\onsite\quickstart\ServerApp.class
+de\onsite\quickstart\model\Student.class
+de\onsite\quickstart\repository\StudentRepository.class
