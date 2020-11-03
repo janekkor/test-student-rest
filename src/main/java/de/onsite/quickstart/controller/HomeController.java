@@ -16,13 +16,13 @@ public class HomeController {
 	StudentRepository studentRep;
 	
 	
-	@RequestMapping("/")
+	@RequestMapping("/students")
 	public String home() {
 	  return "Hello Onsite!";
 	}
 	
 
-	@RequestMapping("/students")
+	@RequestMapping("/")
 	public List<Student> students() {
 	  return studentRep.findAll();
 	}
