@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.onsite.quickstart.model.Item;
 import de.onsite.quickstart.model.Student;
+import de.onsite.quickstart.repository.ItemRepository;
 import de.onsite.quickstart.repository.StudentRepository;
 
 @RestController
@@ -16,6 +18,8 @@ public class HomeController {
 	@Autowired
 	StudentRepository studentRep;
 	
+	@Autowired
+	ItemRepository itemRep;
 	
 	@RequestMapping("/")
 	public String home() {
@@ -30,6 +34,11 @@ public class HomeController {
 	@RequestMapping("/students")
 	public List<Student> students() {
 	  return studentRep.findAll();
+	}
+	
+	@RequestMapping("/items")
+	public List<Item> items() {
+	  return itemRep.findAll();
 	}
 	
 	@RequestMapping("/student/{name}")
