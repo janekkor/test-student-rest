@@ -1,10 +1,13 @@
 package de.onsite.quickstart.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.onsite.quickstart.model.Item;
@@ -21,28 +24,46 @@ public class HomeController {
 	@Autowired
 	ItemRepository itemRep;
 	
-	@RequestMapping("/")
+	@GetMapping("/")
 	public String home() {
 	  return "Hello Onsite!";
 	}
 
-        @RequestMapping("/test")
+	@GetMapping("/test")
 	public String test() {
 	  return "This is a test!";
 	}
 
-	@RequestMapping("/students")
+	@GetMapping("/students")
 	public List<Student> students() {
 	  return studentRep.findAll();
 	}
 	
-	@RequestMapping("/items")
+	@GetMapping("/items")
 	public List<Item> items() {
 	  return itemRep.findAll();
 	}
 	
-	@RequestMapping("/student/{name}")
+	@GetMapping("/student/{id}")
+	public Student studentById(@PathVariable("id") Long id) {
+	  List<Student> studentsById = studentRep.findAllById(Arrays.asList(id));
+	  
+	  if (studentsById == null || studentsById.isEmpty()) {
+		  throw new RuntimeException("The Student with id " + id + " could not be found!");
+	  }
+	  
+	  return studentsById.get(0);
+	}	
+	
+	@GetMapping("/studentName/{name}")
 	public String oneStudent(@PathVariable("name") String name) {
 	  return "Hello " + name;
+	}
+	
+	@PostMapping("/itemsUpdate")
+	public List<Item> studentsUpdate(@RequestBody List<Item> updatedItems) {
+	  itemRep.deleteAll();	
+	  itemRep.saveAll(updatedItems);
+	  return itemRep.findAll();
 	}
 }
