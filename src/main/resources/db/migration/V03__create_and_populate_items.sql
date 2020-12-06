@@ -1,5 +1,5 @@
 CREATE TABLE ITEM(
-ID BIGINT AUTO_INCREMENT not null,
+ID BIGINT not null,
 ITEM_NAME VARCHAR(50) not null
 );
 
