@@ -41,7 +41,8 @@ public class HomeController {
 	
 	@GetMapping("/items")
 	public List<Item> items() {
-	  return itemRep.findAll();
+	  List<Item> allItems = itemRep.findAll();
+	return allItems;
 	}
 	
 	@GetMapping("/student/{id}")
