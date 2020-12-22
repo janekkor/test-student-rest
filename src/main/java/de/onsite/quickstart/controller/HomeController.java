@@ -2,11 +2,14 @@ package de.onsite.quickstart.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,5 +69,42 @@ public class HomeController {
 	  itemRep.deleteAll();	
 	  itemRep.saveAll(updatedItems);
 	  return itemRep.findAll();
+	}
+	
+	@PutMapping("/item/add")
+	public Item addItem(@RequestBody Item newItem) {
+		Item savedItem = itemRep.save(newItem);
+		return savedItem;
+	}
+	
+	@DeleteMapping("/item/delete/{id}")
+	public void deleteItem(@PathVariable("id") Long id) {		
+	  itemRep.deleteById(id);
+	}
+	
+	@PostMapping("/item/change")
+	public Item changeItem(@RequestBody Item changedItem) {
+		Optional<Item> dbItemOptional = itemRep.findById(changedItem.getId());
+		
+		if (!dbItemOptional.isPresent()) {
+			return addItem(changedItem);
+		}
+		
+		Item dbItem = dbItemOptional.get();
+		dbItem.setItemName(changedItem.getItemName());
+		Item savedItem = itemRep.save(dbItem);
+		
+		return savedItem;
+	}
+	
+	@GetMapping("/item/read/{id}")
+	public Item readItem(@PathVariable("id") Long id) {
+		Optional<Item> dbItemOptional = itemRep.findById(id);
+		
+		if (dbItemOptional.isPresent()) {
+			return dbItemOptional.get();
+		}
+				
+		return null;
 	}
 }
