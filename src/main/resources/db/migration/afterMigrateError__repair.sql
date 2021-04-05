@@ -1,0 +1,2 @@
+--For some reason the table cannot be found
+--delete from flyway_schema_history WHERE success=false;
