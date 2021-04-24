@@ -25,8 +25,8 @@ public class Item
 	private String itemName;
 	
     @ManyToOne
-    @JoinColumn(name="ITEM_LIST_ID", nullable=false)
-	private ItemList itemList;
+    @JoinColumn(name="BASKET_ID", nullable=false)
+	private Basket basket;
     
     @Column(name="DONE")
     private boolean done;
@@ -62,12 +62,12 @@ public class Item
 		this.itemName = itemName;
 	}
 
-	public ItemList getItemList() {
-		return itemList;
+	public Basket getBasket() {
+		return basket;
 	}
 
-	public void setItemList(ItemList itemList) {
-		this.itemList = itemList;
+	public void setBasket(Basket basket) {
+		this.basket = basket;
 	}
 	
 	public boolean isDone() {
@@ -96,7 +96,7 @@ public class Item
 
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", itemName=" + itemName + ", itemList=" + itemList + ", done=" + done
+		return "Item [id=" + id + ", itemName=" + itemName + ", itemList=" + basket + ", done=" + done
 				+ ", description=" + description + ", count=" + count + "]";
 	}
 
@@ -108,7 +108,7 @@ public class Item
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + (done ? 1231 : 1237);
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((itemList == null) ? 0 : itemList.hashCode());
+		result = prime * result + ((basket == null) ? 0 : basket.hashCode());
 		result = prime * result + ((itemName == null) ? 0 : itemName.hashCode());
 		return result;
 	}
@@ -136,10 +136,10 @@ public class Item
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (itemList == null) {
-			if (other.itemList != null)
+		if (basket == null) {
+			if (other.basket != null)
 				return false;
-		} else if (!itemList.equals(other.itemList))
+		} else if (!basket.equals(other.basket))
 			return false;
 		if (itemName == null) {
 			if (other.itemName != null)

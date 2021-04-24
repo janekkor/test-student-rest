@@ -15,27 +15,27 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="ITEM_LIST")
-public class ItemList
+@Table(name="BASKET")
+public class Basket
 {	
 	@Id
 	@GeneratedValue
 	@Column(name="ID")
 	private Long id;
 
-	@Column(name="LIST_NAME")
-	private String listName;
+	@Column(name="BASKET_NAME")
+	private String basketName;
 	
-	@OneToMany(mappedBy="itemList")
+	@OneToMany(mappedBy="basket")
 	private List<Item> items;
 	
-	public ItemList() {
+	public Basket() {
 		//empty for hibernate
 	}
 	
-	public ItemList(Long id, String listName) {
+	public Basket(Long id, String basketName) {
 		this.id = id;
-		this.listName = listName;
+		this.basketName = basketName;
 	}
 	
 	public Long getId() {
@@ -46,19 +46,19 @@ public class ItemList
 		this.id = id;
 	}
 	
-	public String getListName() {
-		return listName;
+	public String getBasketName() {
+		return basketName;
 	}
 
-	public void setListName(String listName) {
-		this.listName = listName;
+	public void setBasketName(String basketName) {
+		this.basketName = basketName;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sBuilder = new StringBuilder();
 		items.stream().forEach(i -> sBuilder.append(i.toString()));
-		return "ItemList [id=" + id + ", listName=" + listName + "items=" + sBuilder.toString() + "]";
+		return "ItemList [id=" + id + ", basketName=" + basketName + "items=" + sBuilder.toString() + "]";
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class ItemList
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((items == null) ? 0 : items.hashCode());
-		result = prime * result + ((listName == null) ? 0 : listName.hashCode());
+		result = prime * result + ((basketName == null) ? 0 : basketName.hashCode());
 		return result;
 	}
 
@@ -79,7 +79,7 @@ public class ItemList
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ItemList other = (ItemList) obj;
+		Basket other = (Basket) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -90,10 +90,10 @@ public class ItemList
 				return false;
 		} else if (!items.equals(other.items))
 			return false;
-		if (listName == null) {
-			if (other.listName != null)
+		if (basketName == null) {
+			if (other.basketName != null)
 				return false;
-		} else if (!listName.equals(other.listName))
+		} else if (!basketName.equals(other.basketName))
 			return false;
 		return true;
 	}

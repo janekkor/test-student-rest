@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.onsite.quickstart.model.Item;
-import de.onsite.quickstart.model.ItemList;
+import de.onsite.quickstart.model.Basket;
 import de.onsite.quickstart.model.Student;
-import de.onsite.quickstart.repository.ItemListRepository;
+import de.onsite.quickstart.repository.BasketRepository;
 import de.onsite.quickstart.repository.ItemRepository;
 import de.onsite.quickstart.repository.StudentRepository;
 
@@ -30,7 +30,7 @@ public class HomeController {
 	ItemRepository itemRep;
 
 	@Autowired
-	ItemListRepository itemListRep;
+	BasketRepository basketRep;
 
 	@GetMapping("/")
 	public String home() {
@@ -53,16 +53,16 @@ public class HomeController {
 		return allItems;
 	}
 
-	@PostMapping("/itemsForItemList")
-	public List<Item> itemsForItemList(@RequestBody Long id) {
-		List<Item> allItems = itemRep.findAllByItemListId(id);
+	@PostMapping("/itemsForBasket")
+	public List<Item> itemsForBasketId(@RequestBody Long id) {
+		List<Item> allItems = itemRep.findAllByBasketId(id);
 		return allItems;
 	}
 
-	@GetMapping("/itemLists")
-	public List<ItemList> itemLists() {
-		List<ItemList> allItemLists = itemListRep.findAll();
-		return allItemLists;
+	@GetMapping("/baskets")
+	public List<Basket> baskets() {
+		List<Basket> allBaskets = basketRep.findAll();
+		return allBaskets;
 	}
 
 	@GetMapping("/student/{id}")
@@ -91,9 +91,9 @@ public class HomeController {
 	@PostMapping("/itemsUpdate")
 	public List<Item> itemsUpdate(@RequestBody List<Item> updatedItems) {
 		if (updatedItems != null) {
-			//delete
-			List<Item> allItemsForList = itemRep.findAllByItemListId(updatedItems.get(0).getItemList().getId());
-			for (Item itemFromDB : allItemsForList) {
+			// delete
+			List<Item> allItemsForBasket = itemRep.findAllByBasketId(updatedItems.get(0).getBasket().getId());
+			for (Item itemFromDB : allItemsForBasket) {
 				boolean foundInUpdated = false;
 				for (Item updatedItem : updatedItems) {
 					if (itemFromDB.getId() == updatedItem.getId()) {
@@ -104,8 +104,8 @@ public class HomeController {
 					deleteItem(itemFromDB);
 				}
 			}
-			
-			//update and create
+
+			// update and create
 			for (Item item : updatedItems) {
 				Optional<Item> dbItemOptional = itemRep.findById(item.getId());
 				if (dbItemOptional.isPresent()) {
@@ -122,7 +122,6 @@ public class HomeController {
 
 		return itemRep.findAll();
 	}
-
 
 	@PutMapping("/item/create")
 	public Item createItem(@RequestBody Item newItem) {
@@ -159,7 +158,7 @@ public class HomeController {
 		dbItem.setCount(changedItem.getCount());
 		dbItem.setDescription(changedItem.getDescription());
 		dbItem.setDone(changedItem.isDone());
-		dbItem.setItemList(changedItem.getItemList());
+		dbItem.setBasket(changedItem.getBasket());
 
 		Item savedItem = itemRep.save(dbItem);
 
@@ -176,10 +175,54 @@ public class HomeController {
 
 		return null;
 	}
-	
-	@PostMapping("/mypost")
-	public String myPost(@RequestBody Long id) {
 
-		return "This is my request body id: " + id;
+	@PutMapping("/basket/create")
+	public Basket createBasket(@RequestBody Basket newBasket) {
+		Basket savedBasket = basketRep.save(newBasket);
+		return savedBasket;
+	}
+
+	@DeleteMapping("/basket/delete")
+	public void deleteBasket(@RequestBody Basket basket) {
+		basketRep.deleteById(basket.getId());
+	}
+
+	@PostMapping("/basket/createOrUpdate")
+	public Basket createOrUpdateBasket(@RequestBody Basket changedBasket) {
+		Optional<Basket> dbBasketOptional = basketRep.findById(changedBasket.getId());
+
+		if (!dbBasketOptional.isPresent()) {
+			return createBasket(changedBasket);
+		}
+
+		Basket dbBasket = dbBasketOptional.get();
+		dbBasket.setBasketName(changedBasket.getBasketName());
+		Basket savedBasket = basketRep.save(dbBasket);
+
+		return savedBasket;
+	}
+
+	@PostMapping("/basket/update")
+	public Basket updateBasket(@RequestBody Basket changedBasket) {
+		Optional<Basket> dbBasketOptional = basketRep.findById(changedBasket.getId());
+
+		Basket dbBasket = dbBasketOptional.get();
+		dbBasket.setBasketName(changedBasket.getBasketName());
+		;
+
+		Basket savedBasket = basketRep.save(dbBasket);
+
+		return savedBasket;
+	}
+
+	@PostMapping("/basket/read")
+	public Basket readBasket(@RequestBody Long id) {
+		Optional<Basket> dbBasketOptional = basketRep.findById(id);
+
+		if (dbBasketOptional.isPresent()) {
+			return dbBasketOptional.get();
+		}
+
+		return null;
 	}
 }
